@@ -21,7 +21,7 @@ contract MDKToken is StandardToken, Ownable {
 
   bool public isFrozen = true;
 
-  address public preICO = address(0);
+  address public PreICO = address(0);
   address public ICO = address(0);
 
   modifier notFrozen {
@@ -30,7 +30,7 @@ contract MDKToken is StandardToken, Ownable {
   }
 
   modifier icoOnly {
-    require(msg.sender == ICO || msg.sender == preICO);
+    require(msg.sender == ICO || msg.sender == PreICO);
     _;
   }
 
@@ -61,12 +61,12 @@ contract MDKToken is StandardToken, Ownable {
   }
 
   function startPreICO(address _icoAddress) onlyOwner {
-    require(preICO == address(0));
+    require(PreICO == address(0));
     require(_icoAddress != address(0));
 
-    preICO = _icoAddress;
+    PreICO = _icoAddress;
     balances[msg.sender] = balances[msg.sender].sub(100000000 * (10 ** uint256(decimals)));
-    balances[preICO] = balances[preICO].add(100000000 * (10 ** uint256(decimals)));
+    balances[PreICO] = balances[PreICO].add(100000000 * (10 ** uint256(decimals)));
   }
 
   /**
@@ -105,10 +105,10 @@ contract MDKToken is StandardToken, Ownable {
     return true;
   }
 
-  function mint(address _ico, address _beneficiary, uint256 _value) external icoOnly {
+  function mint(address _beneficiary, uint256 _value) external icoOnly {
     require(_value != 0);
 
-    balances[_ico] = balances[_ico].sub(_value);
+    balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_beneficiary] = balances[_beneficiary].add(_value);
 
     Transfer(0x0, _beneficiary, _value);
