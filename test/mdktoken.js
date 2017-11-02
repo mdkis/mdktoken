@@ -28,9 +28,9 @@ contract('MDKToken', function(accounts) {
 
     assert(transferError != null, 'Transfered successfully while frozen')
 
-    await instance.unfreeze()
+    await instance.unpause()
 
-    let frozen = await instance.isFrozen.call()
+    let frozen = await instance.paused.call()
     assert(!frozen, 'Should be unfrozen')
 
     let transferSecondError = null
