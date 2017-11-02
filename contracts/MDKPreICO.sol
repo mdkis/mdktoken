@@ -121,6 +121,8 @@ contract MDKPreICO is Ownable {
   function finalization() internal {
     if (amountRaised > 0) {
       owner.transfer(amountRaised);
+
+      token.mint(owner, TOTAL_SUPPLY - tokensRaised);
     }
   }
 }
