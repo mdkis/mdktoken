@@ -4,7 +4,7 @@ import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import './MDKToken.sol';
 
-contract MDKPreICO is Ownable {
+contract MDKICO is Ownable {
   using SafeMath for uint256;
 
   event Finalized();
@@ -24,9 +24,9 @@ contract MDKPreICO is Ownable {
 
   bool public isFinalized = false;
 
-  uint256 TOTAL_SUPPLY = 100000000 * 10 ** uint256(decimals);
+  uint256 TOTAL_SUPPLY = 400000000 * 10 ** uint256(decimals);
 
-  function MDKPreICO(
+  function MDKICO(
     uint _startDate,
     uint _endDate,
     uint256 _rate,
