@@ -24,7 +24,7 @@ contract MDKPreICO is TokensCappedCrowdsale, FinalizableCrowdsale, BonusCrowdsal
 
   bool public isFinalized = false;
 
-  uint256 TOTAL_SUPPLY = 100000000 * 10 ** uint256(decimals);
+  uint256 constant TOTAL_SUPPLY = 100000000 * 10 ** uint256(decimals);
 
   function MDKPreICO(
     uint _startDate,
