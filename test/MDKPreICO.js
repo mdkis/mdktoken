@@ -88,7 +88,7 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   it('can buy with bitcoin', async () => {
     await increaseTimeTo(startTime + duration.hours(73))
     await preico.buyForBitcoin(thirdInvestorWallet, ether(51))
-    await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(73)).times(2))
+    await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(73)).plus(ether(51)))
   })
 
   async function validateBalance (wallet, amount) {
