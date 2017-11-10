@@ -10,21 +10,8 @@ import './BonusCrowdsale.sol';
 contract MDKPreICO is TokensCappedCrowdsale, FinalizableCrowdsale, BonusCrowdsale {
   using SafeMath for uint256;
 
-  event Finalized();
-  event TokensPurchased(address who, uint256 tokensAmount, uint256 weiAmount, bool isBTC);
-
   uint8 public constant decimals = 18;
-
-  uint startDate;
-  uint endDate;
-
-  uint256 tokensRaised;
-
-  address tokenAddress;
-
-  bool public isFinalized = false;
-
-  uint256 constant TOTAL_SUPPLY = 100000000 * 10 ** uint256(decimals);
+  uint256 constant tokensCap = 600000000 * 10 ** uint256(decimals);
 
   function MDKPreICO(
     uint _startDate,
@@ -33,17 +20,13 @@ contract MDKPreICO is TokensCappedCrowdsale, FinalizableCrowdsale, BonusCrowdsal
     address _token
   ) public
     Crowdsale(_startDate, _endDate, _rate, msg.sender)
-    TokensCappedCrowdsale(600000000 * 10 ** uint256(decimals))
+    TokensCappedCrowdsale(tokensCap)
     BonusCrowdsale(decimals)
   {
     require(_rate > 0);
     require(_token != address(0));
 
-    startDate = _startDate;
-    endDate = _endDate;
-
-    tokenAddress = _token;
-    token = createTokenContract();
+    token = MintableToken(_token);
   }
 
   function buyForBitcoin(address _beneficiary, uint256 _weiAmount) public onlyOwner {
@@ -59,17 +42,17 @@ contract MDKPreICO is TokensCappedCrowdsale, FinalizableCrowdsale, BonusCrowdsal
     require(now <= endTime);                               // Crowdsale (without startTime check)
     require(!isFinalized);                                 // FinalizableCrowdsale
     require(token.totalSupply().add(tokens) <= tokensCap); // TokensCappedCrowdsale
-    
+
     token.mint(beneficiary, tokens);
   }
 
   function createTokenContract() internal returns (MintableToken) {
-    return MintableToken(tokenAddress);
+    return MintableToken(0x0);
   }
 
   function finalization() internal {
-    if (TOTAL_SUPPLY.sub(tokensRaised) > 0) {
-      token.mint(owner, TOTAL_SUPPLY.sub(tokensRaised));
+    if (tokensCap.sub(token.totalSupply()) > 0) {
+      token.mint(owner, tokensCap.sub(token.totalSupply()));
     }
     token.transferOwnership(owner);
   }
