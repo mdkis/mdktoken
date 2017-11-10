@@ -28,7 +28,7 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   let tokensPerETH = ether(1).dividedBy(rate)
 
   let decimals = 8
-  let decimalsNumber = Math.pow(10, 8)
+  let decimalsNumber = Math.pow(10, 18)
 
   before(async function () {
     //Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
@@ -44,6 +44,23 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
 
     token = await MDKToken.new()
     preico = await MDKPreICO.new(startTime, endTime, rate, token.address)
+
+    await preico.setBonusesForAmounts([
+      ether(150),
+      ether(30),
+      ether(3)
+    ], [
+      100,
+      60,
+      30
+    ]);
+    await preico.setBonusesForTimes([ // Seconds
+      duration.days(1),
+      duration.days(7),
+    ], [ // 10x percents
+      100,
+      50,
+    ]);
 
     await token.startPreICO(preico.address)
   })
@@ -66,6 +83,12 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
     await increaseTimeTo(startTime + duration.hours(72))
     await invest(thirdInvestorWallet, ether(51))
     await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(72)))
+  })
+
+  it('can buy with bitcoin', async () => {
+    await increaseTimeTo(startTime + duration.hours(73))
+    await preico.buyForBitcoin(thirdInvestorWallet, ether(51))
+    await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(73)).times(2))
   })
 
   async function validateBalance (wallet, amount) {

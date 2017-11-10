@@ -21,7 +21,7 @@ contract('MDKToken', function(accounts) {
     await instance.balanceOf
       .call(teamReserve)
       .then(v => v.valueOf())
-      .should.eventually.equal('20000000000000000');
+      .should.eventually.equal('2e+26');
   })
   it("Reserve should have 50M Tokens", async () => {
     let instance = await MDKToken.deployed()
@@ -30,7 +30,7 @@ contract('MDKToken', function(accounts) {
     await instance.balanceOf
       .call(reserveTokens)
       .then(v => v.valueOf())
-      .should.eventually.equal('5000000000000000');
+      .should.eventually.equal('5e+25');
   })
   it("Should be paused", async () => {
     let instance = await MDKToken.deployed()
