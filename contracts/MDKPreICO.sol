@@ -51,7 +51,11 @@ contract MDKPreICO is TokensCappedCrowdsale, FinalizableCrowdsale, BonusCrowdsal
   }
 
   function finalization() internal {
-    if (tokensCap.sub(token.totalSupply()) > 0) {
+    /*
+    We don't call finishMinting in finalization,
+    because after PreICO we will held main round of ICO few months later
+    */
+    if (token.totalSupply() < tokensCap) {
       token.mint(owner, tokensCap.sub(token.totalSupply()));
     }
     token.transferOwnership(owner);
