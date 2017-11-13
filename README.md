@@ -1,5 +1,7 @@
 ## MDK Token Contracts
 
+![](https://travis-ci.org/mdkis/mdktoken.svg?branch=master)
+
 To test install dependencies
 ```
 yarn install
