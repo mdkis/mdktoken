@@ -1,4 +1,6 @@
 sudo: required
+notifications:
+  email: false
 dist: trusty
 language: node_js
 node_js:
