@@ -1,3 +1,7 @@
+coverage.json
+coverageEnv/
+coverage/
+scTopic/
 
 build/
 
