@@ -2,6 +2,7 @@ coverage.json
 coverageEnv/
 coverage/
 scTopic/
+.coveralls.yml
 
 build/
 
