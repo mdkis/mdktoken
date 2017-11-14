@@ -17,7 +17,7 @@ cache:
 script:
   - yarn test
 before_script:
-  - yarn develop > /dev/null &
+  - yarn develop &
   - sleep 5
 after_script:
   - yarn coverage && cat coverage/lcov.info | coveralls
