@@ -5,12 +5,15 @@ dist: trusty
 language: node_js
 node_js:
   - '8'
+install:
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update && sudo apt-get install yarn
+  - yarn
 cache:
   yarn: true
   directories:
     - node_modules
-install:
-  - yarn
 script:
   - yarn test
 before_script:
