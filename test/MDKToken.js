@@ -35,7 +35,7 @@ contract('MDKToken', function(accounts) {
   })
   it("Should be paused", async () => {
     let instance = await MDKToken.deployed()
-    await instance.transfer(0x1, 100000000).should.be.rejectedWith(EVMRevert)
+    await instance.transfer(0x1, 100000000).should.be.rejectedWith(EVMThrow)
   })
 
   it("Should be unpausable", async () => {
@@ -47,12 +47,12 @@ contract('MDKToken', function(accounts) {
   it("Should require PreICO address to be uninitialized", async () => {
     let instance = await MDKToken.new()
     await instance.startPreICO(accounts[1])
-    await instance.startPreICO(accounts[2]).should.be.rejectedWith(EVMRevert)
+    await instance.startPreICO(accounts[2]).should.be.rejectedWith(EVMThrow)
   })
 
   it("Should require PreICO address argument to be not 0", async () => {
     let instance = await MDKToken.new()
-    await instance.startPreICO(0).should.be.rejectedWith(EVMRevert)
+    await instance.startPreICO(0).should.be.rejectedWith(EVMThrow)
   })
 
   it("Should transfer ownership to PreICO and write its address", async () => {
