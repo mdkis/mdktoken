@@ -2,8 +2,8 @@ pragma solidity ^0.4.15;
 
 import 'zeppelin-solidity/contracts/crowdsale/FinalizableCrowdsale.sol';
 import './MDKToken.sol';
-import './TokensCappedCrowdsale.sol';
-import './BonusCrowdsale.sol';
+import '../libs/TokensCappedCrowdsale.sol';
+import '../libs/BonusCrowdsale.sol';
 
 contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCrowdsale, BonusCrowdsale(MDKPreICO.decimals) {
 
