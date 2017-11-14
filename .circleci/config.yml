@@ -39,4 +39,4 @@ jobs:
 
       - run: yarn test
 
-      - run: yarn coverage && cat coverage/lcov.info | coveralls
+      - run: yarn coverage && cat coverage/lcov.info | node_modules/.bin/coveralls
