@@ -42,4 +42,22 @@ contract('MDKToken', function(accounts) {
     await instance.unpause()
     await instance.transfer(accounts[0], 100000000)
   })
+
+  it("Should require PreICO address to be uninitialized", async () => {
+    let instance = await MDKToken.new()
+    await instance.startPreICO(accounts[1])
+    await instance.startPreICO(accounts[2]).should.be.rejectedWith(EVMThrow)
+  })
+
+  it("Should require PreICO address argument to be not 0", async () => {
+    let instance = await MDKToken.new()
+    await instance.startPreICO(0).should.be.rejectedWith(EVMThrow)
+  })
+
+  it("Should transfer ownership to PreICO and write its address", async () => {
+    let instance = await MDKToken.new()
+    await instance.startPreICO(accounts[2])
+    await instance.owner().should.eventually.equal(accounts[2])
+    await instance.PreICO().should.eventually.equal(accounts[2])
+  })
 });
