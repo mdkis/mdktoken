@@ -3,6 +3,7 @@ import {advanceBlock} from './helpers/advanceToBlock'
 import {increaseTimeTo, duration} from './helpers/increaseTime'
 import latestTime from './helpers/latestTime'
 import EVMThrow from './helpers/EVMThrow'
+import EVMRevert from './helpers/EVMRevert'
 
 const BigNumber = web3.BigNumber
 const expect = require('chai').expect
@@ -99,7 +100,7 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   }
   
   async function getBalance (wallet) {
-    return token.balanceOf(wallet);
+    return token.balanceOf.call(wallet);
   };
   
   async function invest (from, amount) {

@@ -2,9 +2,11 @@
   "name": "mdktoken",
   "version": "1.0.0",
   "scripts": {
-    "testrpc": "testrpc --account=\"0xb70f3dfa1a8b7d3f1e4e64f1bfb6f765acb87e89f425eb19240a8005415c984e,1000000000000000000000\" --unlock \"0x32e0eee34b6a76ffed8d17ed7d365f779f3ca3e3\" --account=\"0xbbb1f5f6ece9f685ba6888475b50e13618753827b104436b6b329b603ec71934,2000000000000000000000\" --unlock \"0xa4effd9f5462de218d0d13e47af8b2a5469804a9\" --account=\"0xee7e835167c103d211254a99a3cff16793f8df37d9b2feb91b025571f95491df,2000000000000000000000\" --unlock \"0x96cc370f80d50e2913d3240f901105a6b91e009d\" --account=\"0x654a221912c27c278bb8845ca65f6af7b013de476b9f5d1b002590b1d3ec3c72,2000000000000000000000\" --unlock \"0x5a3fc5f1fadda1c08ca4c518076fb1e11bf22db6\" --account=\"0x296be306bb9fe4aefd2150ef68082eaa9cd190e75516d17d15d6a5156b66a813,2000000000000000000000\" --unlock \"0x358e62c36f9f67233331f4b5792017116b45db2e\" --account=\"0x9ff7c5777889b6492adc6283601911c789b4d0b7765d1d02fb292c95ae7a45d7,2000000000000000000000\" --unlock \"0x3365d30efd8898748af5433f4e7c0fc8a455055d\"",
+    "testrpc": "testrpc -l 6000000 --account=\"0xb70f3dfa1a8b7d3f1e4e64f1bfb6f765acb87e89f425eb19240a8005415c984e,1000000000000000000000\" --unlock \"0x32e0eee34b6a76ffed8d17ed7d365f779f3ca3e3\" --account=\"0xbbb1f5f6ece9f685ba6888475b50e13618753827b104436b6b329b603ec71934,2000000000000000000000\" --unlock \"0xa4effd9f5462de218d0d13e47af8b2a5469804a9\" --account=\"0xee7e835167c103d211254a99a3cff16793f8df37d9b2feb91b025571f95491df,2000000000000000000000\" --unlock \"0x96cc370f80d50e2913d3240f901105a6b91e009d\" --account=\"0x654a221912c27c278bb8845ca65f6af7b013de476b9f5d1b002590b1d3ec3c72,2000000000000000000000\" --unlock \"0x5a3fc5f1fadda1c08ca4c518076fb1e11bf22db6\" --account=\"0x296be306bb9fe4aefd2150ef68082eaa9cd190e75516d17d15d6a5156b66a813,2000000000000000000000\" --unlock \"0x358e62c36f9f67233331f4b5792017116b45db2e\" --account=\"0x9ff7c5777889b6492adc6283601911c789b4d0b7765d1d02fb292c95ae7a45d7,2000000000000000000000\" --unlock \"0x3365d30efd8898748af5433f4e7c0fc8a455055d\"",
     "test": "truffle test",
-    "coverage": "solidity-coverage"
+    "coverage": "solidity-coverage",
+    "develop": "truffle develop",
+    "devlog": "truffle develop --log"
   },
   "dependencies": {
     "@babel/core": "7.0.0-beta.31",
@@ -16,11 +18,9 @@
     "chai-bignumber": "^2.0.2",
     "ethereumjs-testrpc": "^4.1.3",
     "ethereumjs-util": "^5.1.2",
-    "truffle": "^3.4.11",
-    "zeppelin-solidity": "^1.3.0"
-  },
-  "devDependencies": {
-    "coveralls": "^3.0.0",
-    "solidity-coverage": "^0.4.0"
+    "solidity-coverage": "^0.4.0",
+    "truffle": "^4.0.1",
+    "zeppelin-solidity": "^1.3.0",
+    "coveralls": "^3.0.0"
   }
 }
