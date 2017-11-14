@@ -1,6 +1,6 @@
 ## MDK Token Contracts
 
-[![Coverage Status](https://coveralls.io/repos/github/mdkis/mdktoken/badge.svg?branch=master)](https://coveralls.io/github/mdkis/mdktoken?branch=master) ![](https://travis-ci.org/mdkis/mdktoken.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mdkis/mdktoken/badge.svg?branch=master)](https://coveralls.io/github/mdkis/mdktoken?branch=master) [![CircleCI](https://circleci.com/gh/mdkis/mdktoken.svg?style=svg)](https://circleci.com/gh/mdkis/mdktoken)
 
 To test install dependencies
 ```
