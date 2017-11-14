@@ -5,12 +5,16 @@ dist: trusty
 language: node_js
 node_js:
   - '8'
+cache:
+  yarn: true
+  directories:
+    - node_modules
 install:
-  - npm install
+  - yarn
 script:
-  - npm test
+  - yarn test
 before_script:
-  - npm develop > /dev/null &
+  - yarn develop > /dev/null &
   - sleep 5
 after_script:
-  - npm run coverage && cat coverage/lcov.info | coveralls
+  - yarn coverage && cat coverage/lcov.info | coveralls
