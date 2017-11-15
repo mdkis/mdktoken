@@ -1,6 +1,6 @@
 import ether from './helpers/ether'
-import {advanceBlock} from './helpers/advanceToBlock'
-import {increaseTimeTo, duration} from './helpers/increaseTime'
+import { advanceBlock } from './helpers/advanceToBlock'
+import { increaseTimeTo, duration } from './helpers/increaseTime'
 import latestTime from './helpers/latestTime'
 import EVMThrow from './helpers/EVMThrow'
 import EVMRevert from './helpers/EVMRevert'
@@ -51,17 +51,17 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
       ether(30),
       ether(3)
     ], [
-      100,
-      60,
-      30
-    ]);
+        100,
+        60,
+        30
+      ]);
     await preico.setBonusesForTimes([ // Seconds
       duration.days(1),
       duration.days(7),
     ], [ // 10x percents
-      100,
-      50,
-    ]);
+        100,
+        50,
+      ]);
 
     await token.startPreICO(preico.address)
   })
@@ -92,25 +92,33 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
     await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(73)).plus(ether(51)))
   })
 
-  async function validateBalance (wallet, amount) {
+  it('should be finalized', async () => {
+    let isEnded = await preico.hasEnded()
+    isEnded.should.equal(false)
+    await increaseTimeTo(afterEndTime)
+    let ended = await preico.hasEnded()
+    ended.should.equal(true)
+  })
+
+  async function validateBalance(wallet, amount) {
     let balance = await getBalance(wallet);
     balance.should.be.bignumber.equal(amount);
-  
+
     return balance;
   }
-  
-  async function getBalance (wallet) {
+
+  async function getBalance(wallet) {
     return token.balanceOf.call(wallet);
   };
-  
-  async function invest (from, amount) {
-    return preico.sendTransaction({from: from, value: amount})
+
+  async function invest(from, amount) {
+    return preico.sendTransaction({ from: from, value: amount })
   }
-  
-  function calculateReward (amount, timeDiff) {
+
+  function calculateReward(amount, timeDiff) {
     let base = amount.dividedBy(tokensPerETH);
     let result = base;
-  
+
     if (amount.greaterThanOrEqualTo(ether(3))) {
       if (amount.greaterThanOrEqualTo(ether(30))) {
         if (amount.greaterThanOrEqualTo(ether(150))) {

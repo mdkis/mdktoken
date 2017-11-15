@@ -49,7 +49,7 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
   }
 
   /**
-  * @dev Override super createTokenContract, so it'll not deploy MintableToke
+  * @dev Override super createTokenContract, so it'll not deploy MintableToken
   */
   function createTokenContract() internal returns (MintableToken) {
     return MintableToken(0);
