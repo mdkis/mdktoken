@@ -8,7 +8,7 @@ yarn install
 ```
 Run testrpc
 ```
-yarn develop
+yarn testrpc
 ```
 And to test in different window run:
 ```
