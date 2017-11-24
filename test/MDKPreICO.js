@@ -28,68 +28,75 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   let rate = 22500
   let tokensPerETH = ether(1).dividedBy(rate)
 
-  let decimals = 8
   let decimalsNumber = Math.pow(10, 18)
 
-  before(async function () {
-    //Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
-    await advanceBlock()
-    const initialTime = latestTime()
-    const diff = 0
+  // https://stackoverflow.com/questions/26107027/
+  function makeSuite(name, tests) {
+    describe(name, async function () {
+      beforeEach(async function () {
+        //Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
+        await advanceBlock()
+        const initialTime = latestTime()
+        const diff = 0
 
-    await increaseTimeTo(initialTime + diff)
+        await increaseTimeTo(initialTime + diff)
 
-    startTime = latestTime() + duration.days(1)
-    endTime = startTime + duration.days(30)
-    afterEndTime = endTime + duration.seconds(1)
+        startTime = latestTime() + duration.days(1)
+        endTime = startTime + duration.days(30)
+        afterEndTime = endTime + duration.seconds(1)
 
-    token = await MDKToken.new()
-    preico = await MDKPreICO.new(startTime, endTime, rate, token.address)
+        token = await MDKToken.new()
+        preico = await MDKPreICO.new(startTime, endTime, rate, token.address)
 
-    await preico.setBonusesForAmounts([
-      ether(150),
-      ether(30),
-      ether(3)
-    ], [
-      100,
-      60,
-      30
-    ]);
-    await preico.setBonusesForTimes([ // Seconds
-      duration.days(1),
-      duration.days(7),
-    ], [ // 10x percents
-      100,
-      50,
-    ]);
+        await preico.setBonusesForAmounts([
+          50000,
+          10000,
+          1000
+        ], [
+          100,
+          60,
+          30
+        ]);
+        await preico.setBonusesForTimes([ // Seconds
+          duration.days(1),
+          duration.days(7),
+        ], [ // 10x percents
+          100,
+          50,
+        ])
 
-    await token.startPreICO(preico.address)
-  })
+        await token.startPreICO(preico.address)
+      })
+      tests()
+    })
+  }
 
-  it('should be owner of token contract', async () => {
-    await token.owner.call().should.eventually.equal(preico.address)
-  })
-
-  it('should mint', async () => {
-    await increaseTimeTo(startTime + duration.hours(2))
-    await invest(investorWallet, ether(1))
-    await validateBalance(investorWallet, calculateReward(ether(1), duration.hours(2)))
-  })
-
-  it('bonuses test', async () => {
-    await increaseTimeTo(startTime + duration.hours(6))
-    await invest(secondInvestorWallet, ether(5))
-    await validateBalance(secondInvestorWallet, calculateReward(ether(5), duration.hours(6)))
-
-    await increaseTimeTo(startTime + duration.hours(72))
-    await invest(thirdInvestorWallet, ether(51))
-    await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(72)))
-  })
-
-  it('can buy with bitcoin', async () => {
-    await increaseTimeTo(startTime + duration.hours(73))
-    await preico.buyForBitcoin(thirdInvestorWallet, ether(51))
-    await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(73)).plus(ether(51)))
+  makeSuite('Crowdsale', async () => {
+    it('should be owner of token contract', async () => {
+      await token.owner.call().should.eventually.equal(preico.address)
+    })
+  
+    it('should mint', async () => {
+      await increaseTimeTo(startTime + duration.hours(2))
+      await invest(investorWallet, ether(1))
+      await validateBalance(investorWallet, calculateReward(ether(1), duration.hours(2)))
+    })
+  
+    it('bonuses test', async () => {
+      await increaseTimeTo(startTime + duration.hours(6))
+      await invest(secondInvestorWallet, ether(5))
+      await validateBalance(secondInvestorWallet, calculateReward(ether(5), duration.hours(6)))
+  
+      await increaseTimeTo(startTime + duration.hours(72))
+      await invest(thirdInvestorWallet, ether(51))
+      await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(72)))
+    })
+  
+    it('can buy with bitcoin', async () => {
+      await increaseTimeTo(startTime + duration.hours(73))
+      await preico.buyForBitcoin(thirdInvestorWallet, 1000)
+      await validateBalance(thirdInvestorWallet, 1000)
+    })
   })
 
   async function validateBalance (wallet, amount) {

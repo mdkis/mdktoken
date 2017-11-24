@@ -16,19 +16,19 @@ contract BonusCrowdsale is Crowdsale, Ownable {
     // The following will be populated by main crowdsale contract
     uint32[] public BONUS_TIMES;
     uint32[] public BONUS_TIMES_VALUES;
-    uint256[] public BONUS_AMOUNTS;
+    uint32[] public BONUS_AMOUNTS;
     uint32[] public BONUS_AMOUNTS_VALUES;
     uint public constant BONUS_COEFF = 1000; // Values should be 10x percents, value 1000 = 100%
     
     // Members
-    uint public tokenDecimals;
+    uint public tokenPriceInCents;
 
     /**
     * @dev Contructor
-    * @param _tokenDecimals number of digits after decimal point for CAT token
+    * @param _tokenPriceInCents token price in USD cents. The price is fixed
     */
-    function BonusCrowdsale(uint256 _tokenDecimals) public {
-      tokenDecimals = _tokenDecimals;
+    function BonusCrowdsale(uint256 _tokenPriceInCents) public {
+        tokenPriceInCents = _tokenPriceInCents;
     }
 
     /**
@@ -63,7 +63,7 @@ contract BonusCrowdsale is Crowdsale, Ownable {
     /**
     * @dev Sets bonuses for USD amounts
     */
-    function setBonusesForAmounts(uint256[] amounts, uint32[] values) public onlyOwner {
+    function setBonusesForAmounts(uint32[] amounts, uint32[] values) public onlyOwner {
         require(amounts.length == values.length);
         for (uint i = 0; i + 1 < amounts.length; i++) {
             require(amounts[i] > amounts[i+1]);
@@ -78,7 +78,11 @@ contract BonusCrowdsale is Crowdsale, Ownable {
     * @param beneficiary walelt of investor to receive tokens
     */
     function buyTokens(address beneficiary) public payable {
-        uint256 bonus = computeBonus(msg.value);
+        // Compute usd amount = wei * catsInEth * usdcentsInCat / usdcentsPerUsd / weisPerEth
+        uint256 usdValue = msg.value.mul(rate).mul(tokenPriceInCents).div(100).div(1 ether); 
+        
+        // Compute time and amount bonus
+        uint256 bonus = computeBonus(usdValue);
 
         // Apply bonus by adjusting and restoring rate member
         uint256 oldRate = rate;
@@ -92,8 +96,8 @@ contract BonusCrowdsale is Crowdsale, Ownable {
     * The total bonus is the sum of bonus by time and bonus by amount
     * @return bonus percentage scaled by 10
     */
-    function computeBonus(uint256 _wei) public constant returns(uint256) {
-        return computeAmountBonus(_wei).add(computeTimeBonus());
+    function computeBonus(uint256 usdValue) public constant returns(uint256) {
+        return computeAmountBonus(usdValue).add(computeTimeBonus());
     }
 
     /**
@@ -116,9 +120,9 @@ contract BonusCrowdsale is Crowdsale, Ownable {
     * @dev Computes bonus based on amount of contribution
     * @return bonus percentage scaled by 10
     */
-    function computeAmountBonus(uint256 _wei) public constant returns(uint256) {
+    function computeAmountBonus(uint256 usdValue) public constant returns(uint256) {
         for (uint i = 0; i < BONUS_AMOUNTS.length; i++) {
-            if (_wei >= BONUS_AMOUNTS[i]) {
+            if (usdValue >= BONUS_AMOUNTS[i]) {
                 return BONUS_AMOUNTS_VALUES[i];
             }
         }
