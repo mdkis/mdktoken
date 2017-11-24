@@ -9,7 +9,7 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
 
   uint8 public constant decimals = 18;
   uint256 constant TOKENS_CAP = 600000000 * (10 ** uint256(decimals));
-  uint256 public constant TOKEN_USDCENT_PRICE = 1;
+  uint256 public constant TOKEN_USDCENT_PRICE = 12;
 
   event RateChange(uint256 rate);
 

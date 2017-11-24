@@ -26,6 +26,7 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   let usedTokensSupply = new BigNumber(0)
 
   let rate = 22500
+  let tokenPriceInCents = 12
   let tokensPerETH = ether(1).dividedBy(rate)
 
   let decimalsNumber = Math.pow(10, 18)
@@ -88,8 +89,8 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
       await validateBalance(secondInvestorWallet, calculateReward(ether(5), duration.hours(6)))
   
       await increaseTimeTo(startTime + duration.hours(72))
-      await invest(thirdInvestorWallet, ether(51))
-      await validateBalance(thirdInvestorWallet, calculateReward(ether(51), duration.hours(72)))
+      await invest(thirdInvestorWallet, ether(67))
+      await validateBalance(thirdInvestorWallet, calculateReward(ether(67), duration.hours(72)))
     })
   
     it('can buy with bitcoin', async () => {
@@ -117,10 +118,12 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
   function calculateReward (amount, timeDiff) {
     let base = amount.dividedBy(tokensPerETH);
     let result = base;
-  
-    if (amount.greaterThanOrEqualTo(ether(3))) {
-      if (amount.greaterThanOrEqualTo(ether(30))) {
-        if (amount.greaterThanOrEqualTo(ether(150))) {
+
+    let cents = amount.times(rate).times(tokenPriceInCents).div(1000).div(ether(1));
+
+    if (cents.greaterThanOrEqualTo(1000)) {
+      if (cents.greaterThanOrEqualTo(10000)) {
+        if (cents.greaterThanOrEqualTo(50000)) {
           result = result.plus(base.times(100).dividedBy(1000)); // Contribution > 150 ether, 10% bonus
         } else {
           result = result.plus(base.times(60).dividedBy(1000)); // Contribution > 30 ether, 6% bonus
