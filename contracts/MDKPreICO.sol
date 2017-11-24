@@ -77,9 +77,6 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
     We don't call finishMinting in finalization,
     because after PreICO we will held main round of ICO few months later
     */
-    if (token.totalSupply() < TOKENS_CAP) {
-      token.mint(owner, TOKENS_CAP.sub(token.totalSupply()));
-    }
     token.transferOwnership(owner);
   }
 
