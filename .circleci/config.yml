@@ -34,7 +34,7 @@ jobs:
 
       - run:
           name: Running testpc
-          command: yarn develop
+          command: yarn testrpc
           background: true
 
       - run: yarn test

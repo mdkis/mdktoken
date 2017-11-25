@@ -5,10 +5,13 @@ import './MDKToken.sol';
 import '../libs/TokensCappedCrowdsale.sol';
 import '../libs/BonusCrowdsale.sol';
 
-contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCrowdsale, BonusCrowdsale(MDKPreICO.decimals) {
+contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCrowdsale, BonusCrowdsale(MDKPreICO.TOKEN_USDCENT_PRICE) {
 
   uint8 public constant decimals = 18;
   uint256 constant TOKENS_CAP = 600000000 * (10 ** uint256(decimals));
+  uint256 public constant TOKEN_USDCENT_PRICE = 12;
+
+  event RateChange(uint256 rate);
 
   /**
   * @dev Contructor
@@ -27,6 +30,17 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
   {
     require(_token != address(0));
     token = MintableToken(_token);
+  }
+
+  /**
+  * @dev Sets MDK to Ether rate. Will be called multiple times durign the crowdsale to adjsut the rate
+  * since MDK cost is fixed in USD, but USD/ETH rate is changing
+  * @param _rate defines MDK/ETH rate: 1 ETH = _rate MDKs
+  */
+  function setRate(uint256 _rate) external onlyOwner {
+      require(_rate != 0x0);
+      rate = _rate;
+      RateChange(_rate);
   }
 
   /**
@@ -63,9 +77,8 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
     We don't call finishMinting in finalization,
     because after PreICO we will held main round of ICO few months later
     */
-    if (token.totalSupply() < TOKENS_CAP) {
-      token.mint(owner, TOKENS_CAP.sub(token.totalSupply()));
-    }
     token.transferOwnership(owner);
   }
+
+
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.4.15;
 import 'zeppelin-solidity/contracts/token/PausableToken.sol';
 import 'zeppelin-solidity/contracts/token/TokenTimelock.sol';
 import 'zeppelin-solidity/contracts/token/MintableToken.sol';
-import '../libs/TokenVesting.sol'; // This is zeppelin-solidity contract too, but it is not yet available in npm release
+import 'zeppelin-solidity/contracts/token/TokenVesting.sol';
 
 contract MDKToken is MintableToken, PausableToken {
   string public constant name = "MDKToken";
