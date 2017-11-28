@@ -24,9 +24,10 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
     uint _startTime,
     uint _endTime,
     uint256 _rate,
-    address _token
+    address _token,
+    address _teamWallet
   ) public
-    Crowdsale(_startTime, _endTime, _rate, msg.sender)
+    Crowdsale(_startTime, _endTime, _rate, _teamWallet)
   {
     require(_token != address(0));
     token = MintableToken(_token);
@@ -60,6 +61,16 @@ contract MDKPreICO is TokensCappedCrowdsale(MDKPreICO.TOKENS_CAP), FinalizableCr
     require(token.totalSupply().add(tokens) <= TOKENS_CAP); // TokensCappedCrowdsale
 
     token.mint(beneficiary, tokens);
+  }
+
+  /**
+  * @dev Allows to adjust the crowdsale end time
+  */
+  function setEndTime(uint256 _endTime) external onlyOwner {
+    require(!isFinalized);
+    require(_endTime >= startTime);
+    require(_endTime >= now);
+    endTime = _endTime;
   }
 
   /**

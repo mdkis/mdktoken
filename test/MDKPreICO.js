@@ -15,6 +15,8 @@ const should = require('chai')
 const MDKToken = artifacts.require("./MDKToken.sol")
 const MDKPreICO = artifacts.require("./MDKPreICO.sol")
 
+const teamFund = '0x4E5bD325991F7c93d6b3039ef2ee6AC43684deE5'
+
 contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWallet, thirdInvestorWallet]) {
   let startTime
   let endTime
@@ -46,8 +48,8 @@ contract('Crowdsale: ', function ([mainWallet, investorWallet, secondInvestorWal
         endTime = startTime + duration.days(30)
         afterEndTime = endTime + duration.seconds(1)
 
-        token = await MDKToken.new()
-        preico = await MDKPreICO.new(startTime, endTime, rate, token.address)
+        token = await MDKToken.new(teamFund)
+        preico = await MDKPreICO.new(startTime, endTime, rate, token.address, teamFund)
 
         await preico.setBonusesForAmounts([
           50000,

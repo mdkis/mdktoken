@@ -22,27 +22,27 @@ contract MDKToken is MintableToken, PausableToken {
   * @dev Constructor
   * Initializing token contract, locking team and reserve funds, sending renumeration fund to owner
   */
-  function MDKToken() public {
-    lockTeamTokens();
-    lockReserveTokens();
+  function MDKToken(address _teamFund) public {
+    lockTeamTokens(_teamFund);
+    lockReserveTokens(_teamFund);
 
-    mint(owner, 250000000 * (10 ** uint256(decimals)));
+    mint(_teamFund, 250000000 * (10 ** uint256(decimals)));
     pause();
   }
 
   /**
   * @dev Lock team tokens for 3 years with vesting contract. Team can receive first portion of tokens 3 months after contract created, after that they can get portion of tokens proportional to time left until full unlock
   */
-  function lockTeamTokens() private {
-    teamTokens = new TokenVesting(owner, now, 90 days, 1095 days, false);
+  function lockTeamTokens(address _teamFund) private {
+    teamTokens = new TokenVesting(_teamFund, now, 90 days, 1095 days, false);
     mint(teamTokens, 200000000 * (10 ** uint256(decimals)));
   }
 
   /**
   * @dev Lock reserve tokens for 1 year
   */
-  function lockReserveTokens() private {
-    reserveTokens = new TokenTimelock(this, owner, uint64(now + 1 years));
+  function lockReserveTokens(address _teamFund) private {
+    reserveTokens = new TokenTimelock(this, _teamFund, uint64(now + 1 years));
     mint(reserveTokens, 50000000 * (10 ** uint256(decimals)));
   }
 
