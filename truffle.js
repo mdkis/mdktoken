@@ -1,5 +1,8 @@
 require('babel-register');
 require('babel-polyfill');
+const Provider = require('./helpers/Provider');
+const ProviderRinkeby = Provider.createRinkebyNetwork("key");
+const ProviderMainnet = Provider.createMainNetwork("key");
 
 module.exports = {
   networks: {
@@ -13,7 +16,9 @@ module.exports = {
       host: "localhost",
       port: 9555,
       network_id: "*" // Match any network id
-    }
+    },
+    infuraRinkeby: ProviderRinkeby.getNetwork(),
+    infuraMainnet: ProviderMainnet.getNetwork()
   },
   solc: {
     optimizer: {
